@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from datetime import datetime
+import os
 import time
 
 
@@ -23,7 +25,7 @@ class pywappbot:
         driver.get(page_url)
         input("Press enter")
 
-    def usercheck(self,username):
+    def usercheck(self, username):
         # selecting the username
         search_box = driver.find_elements(
             By.XPATH, "//div[@title='Search input textbox']")
@@ -34,16 +36,16 @@ class pywappbot:
     def send_message(self, msg, user):
         self.user = user
         self.msg = msg
-        self.usercheck(username = user)
+        self.usercheck(username=user)
         textbox = driver.find_elements(By.CLASS_NAME, "p3_M1")
         textbox[0].send_keys(msg)
         textbox[0].send_keys(Keys.ENTER)  # press ENTER
         print("Message send successfully")
 
-    def send_attachment(self, file_path,username):
+    def send_attachment(self, file_path, username):
         self.username = username
         self.file_path = file_path
-        self.usercheck(username = username)
+        self.usercheck(username=username)
         attach = driver.find_elements(By.XPATH, "//div[@title='Attach']")
         attach[0].click()
         file_accept_box = driver.find_elements(
@@ -53,15 +55,22 @@ class pywappbot:
         submit_button = driver.find_elements(
             By.XPATH, "//span[@data-icon='send']")
         submit_button[0].click()
-        
-    def text_to_audio(self,text,username):
+
+    def text_to_audio(self, text, username):
         self.text = text
         self.username = username
+        time_class = datetime.now()
+        date_time = time_class.strftime("%d-%m-%Y,%H:%M:%S")
+        parent_directory = os.getcwd()
+        path = os.path.join(parent_directory, "Sounds")
+        if not os.path.exists("Sounds"):
+            os.mkdir(path)
         language = 'en'
-        myobj = gTTS(text=text, lang=language, slow=False)
-        myobj.save("message.mp3")
-        self.send_attachment(
-            file_path="/home/vaishnav/developments/Python/selenium/Whatsapp Automation/message.mp3",username=username)
-        
+        myobj = gTTS(text="hello world", lang=language, slow=False)
+        print(date_time)
+        myobj.save("%s.mp3" % os.path.join(path, str(date_time)))
+        path_of_sound = path + date_time + ".mp3"
+        self.send_attachment(path_of_sound, username)
+
     def close(self):
         driver.close()
