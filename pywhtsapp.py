@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime
 import os
+import time
 
 
 class pywhtsapp:
@@ -36,7 +37,6 @@ class pywhtsapp:
 
     def usercheck(self, username):
         # selecting the username
-        # The username input box
         username_box = By.XPATH, "//div[@title='Search input textbox']"
         chkLoaded = self.pageLoadCheck(loc=username_box, _time=15)
         username_box = str(username_box)
@@ -62,15 +62,15 @@ class pywhtsapp:
         
         self.usercheck(username=username)
         self.pageLoadCheck(Attach_button, 1)
-        attach = driver.find_elements(Attach_button)
+        attach = driver.find_elements(By.XPATH, "//div[@title='Attach']")
         attach[0].click()
         self.pageLoadCheck(video_audio_img, 1)
-        file_accept_box = driver.find_elements(video_audio_img)
+        file_accept_box = driver.find_elements(By.XPATH, "//input[@accept='image/*,video/mp4,video/3gpp,video/quicktime']")
         file_accept_box[0].send_keys(file_path)
         self.pageLoadCheck(file_send_button, 1)
-        submit_button = driver.find_elements(file_send_button)
+        submit_button = driver.find_elements(By.XPATH, "//span[@data-icon='send']")
         submit_button[0].click()
-        return "Attchment sene successfully"
+        return "Attachment send successfully"
 
     def text_to_audio(self, text, username):
         self.text = text
@@ -78,15 +78,15 @@ class pywhtsapp:
         time_class = datetime.now()
         date_time = time_class.strftime("%d-%m-%Y,%H:%M:%S")
         parent_directory = os.getcwd()
-        path = os.path.join(parent_directory, "Sounds")
+        path = os.path.join(parent_directory, "Sounds/")
         if not os.path.exists("Sounds"):
             os.mkdir(path)
         language = 'en'
         myobj = gTTS(text=text, lang=language, slow=False)
-        print(date_time)
         myobj.save("%s.mp3" % os.path.join(path, str(date_time)))
         path_of_sound = path + date_time + ".mp3"
         self.send_attachment(path_of_sound, username)
 
     def close(self):
+        time.sleep(10)
         driver.close()
