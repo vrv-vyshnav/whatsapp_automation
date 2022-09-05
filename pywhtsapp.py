@@ -26,7 +26,7 @@ class pywhtsapp:
         page_url = 'https://web.whatsapp.com/'
         driver.get(page_url)
 
-    def pageLoadCheck(self, loc, _time = 2):
+    def pageLoadCheck(self, loc, _time=2):
         try:
             WebDriverWait(driver, _time).until(
                 EC.presence_of_element_located((loc))
@@ -41,14 +41,15 @@ class pywhtsapp:
         chkLoaded = self.pageLoadCheck(loc=username_box, _time=15)
         username_box = str(username_box)
         if chkLoaded:
-            search_box = driver.find_elements(By.XPATH, "//div[@title='Search input textbox']")
+            search_box = driver.find_elements(
+                By.XPATH, "//div[@title='Search input textbox']")
             search_box[0].send_keys(username)
             search_box[0].send_keys(Keys.ENTER)  # press ENTER
 
     def send_message(self, msg, user):
         msg_box = By.CLASS_NAME, "p3_M1"
         self.usercheck(username=user)
-        loadCheck =self.pageLoadCheck(msg_box)
+        loadCheck = self.pageLoadCheck(msg_box)
         if loadCheck:
             textbox = driver.find_elements(By.CLASS_NAME, "p3_M1")
             textbox[0].send_keys(msg)
@@ -59,16 +60,18 @@ class pywhtsapp:
         Attach_button = By.XPATH, "//div[@title='Attach']"
         video_audio_img = By.XPATH, "//input[@accept='image/*,video/mp4,video/3gpp,video/quicktime']"
         file_send_button = By.XPATH, "//span[@data-icon='send']"
-        
-        self.usercheck(username=username)
+
+        self.usercheck(username)
         self.pageLoadCheck(Attach_button, 1)
         attach = driver.find_elements(By.XPATH, "//div[@title='Attach']")
         attach[0].click()
         self.pageLoadCheck(video_audio_img, 1)
-        file_accept_box = driver.find_elements(By.XPATH, "//input[@accept='image/*,video/mp4,video/3gpp,video/quicktime']")
+        file_accept_box = driver.find_elements(
+            By.XPATH, "//input[@accept='image/*,video/mp4,video/3gpp,video/quicktime']")
         file_accept_box[0].send_keys(file_path)
         self.pageLoadCheck(file_send_button, 1)
-        submit_button = driver.find_elements(By.XPATH, "//span[@data-icon='send']")
+        submit_button = driver.find_elements(
+            By.XPATH, "//span[@data-icon='send']")
         submit_button[0].click()
         return "Attachment send successfully"
 
@@ -87,6 +90,6 @@ class pywhtsapp:
         path_of_sound = path + date_time + ".mp3"
         self.send_attachment(path_of_sound, username)
 
-    def close(self):
-        time.sleep(10)
+    def close(self,_time = 10):
+        time.sleep(_time)
         driver.close()
