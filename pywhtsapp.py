@@ -46,13 +46,13 @@ class pywhtsapp:
             search_box[0].send_keys(username)
             search_box[0].send_keys(Keys.ENTER)  # press ENTER
 
-    def send_message(self, msg, user):
+    def send_message(self, text, user):
         msg_box = By.CLASS_NAME, "p3_M1"
         self.usercheck(username=user)
         loadCheck = self.pageLoadCheck(msg_box)
         if loadCheck:
             textbox = driver.find_elements(By.CLASS_NAME, "p3_M1")
-            textbox[0].send_keys(msg)
+            textbox[0].send_keys(text)
             textbox[0].send_keys(Keys.ENTER)  # press ENTER
             return "Message send Successfully"
 
