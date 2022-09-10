@@ -11,7 +11,7 @@ import time
 
 
 class pywhtsapp:
-    def __init__(self, path='/home/vaishnav/chromedriver'):
+    def __init__(self, path='/home/vaishnav/Developments/Python/selenium/chromedriver'):
         global driver
         options = webdriver.ChromeOptions()
         options.add_experimental_option(
