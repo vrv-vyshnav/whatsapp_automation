@@ -5,23 +5,22 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 from datetime import datetime
 import os
 import time
 
 
 class pywhtsapp:
-    def __init__(self, path='/home/vaishnav/Developments/Python/selenium/chromedriver'):
+    def __init__(self, path='/home/vaishnav/Developments/Python/whatsapp_automation/chromedriver'):
         global driver
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option(
-            "excludeSwitches", ["enable-automation"])
-        options.add_experimental_option("useAutomationExtension", False)
+        options = Options()
+        options.add_argument(
+            r"--user-data-dir=C:/home/vaishnav/.config/google-chrome/Profile 1")
 
         # options.add_argument("--headless") # To run in background
 
-        service = ChromeService(executable_path=path)
-        driver = webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome(executable_path=path, chrome_options=options)
 
         # login section
         page_url = 'https://web.whatsapp.com/'
@@ -70,13 +69,12 @@ class pywhtsapp:
             print("[ "+'\033[91m' + "FAILED" +
                   "\033[0m" + " ] Messge send Failed")
 
-    def send_attachment(self, file_path, user):
+    def send_attachment(self, _path, user):
         # Sending attachements video / audio / pdf
         try:
             Attach_button = By.XPATH, "//div[@title='Attach']"
             video_audio_img = By.XPATH, "//input[@accept='image/*,video/mp4,video/3gpp,video/quicktime']"
             file_send_button = By.XPATH, "//span[@data-icon='send']"
-
             self.usercheck(user)
             self.pageLoadCheck(Attach_button, 1)
             attach = driver.find_elements(By.XPATH, "//div[@title='Attach']")
@@ -84,7 +82,7 @@ class pywhtsapp:
             self.pageLoadCheck(video_audio_img, 1)
             file_accept_box = driver.find_elements(
                 By.XPATH, "//input[@accept='image/*,video/mp4,video/3gpp,video/quicktime']")
-            file_accept_box[0].send_keys(file_path)
+            file_accept_box[0].send_keys(_path)
             self.pageLoadCheck(file_send_button, 1)
             submit_button = driver.find_elements(
                 By.XPATH, "//span[@data-icon='send']")
